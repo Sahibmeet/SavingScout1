@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Flyers</title>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+</head>
+<body>
+    <br>
+
+    <div class="col-md-4">
+        <a href="{{ url_for('index') }}"> <button class="btn-primary"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+          </svg> Change Postal Code </button></a>
+          </div>
+        <br>
+    <br>
+    <div class="text-center">
+        <br><h1>All Flyers</h1>
+    <br></div>
+    <br>
+    
+    {% for flyer in flyer_data %}
+    <div class="container-fluid col-xs-12 bg-light bg-gradient">
+        <br>
+        <br>
+        <div class="text-center">
+            <img src="{{ flyer['merchant_logo'] }}" alt="">
+        </div>
+        <br>
+        <div class="col-xs-6 text-center">
+            <a href="{{ url_for('view_flyer', flyer_path='https://backflipp.wishabi.com/flipp/flyers/' ~ flyer['id'] ~ '-' ~ flyer['merchant'] ~ '-' ~ flyer['name'] ~ '?postal_code='~ flyer['postal_code']) }}">
+                <img src="{{ flyer['thumbnail_url'] }}" alt="">
+            </a>
+        </div>
+        <br>
+        <div class="col-xs-4 text-center">
+            <p><strong>Valid From:</strong> {{ flyer['valid_from'] | to_date }}</p>
+            <p><strong>Valid To:</strong> {{ flyer['valid_to']| to_date }}</p>
+            <a href="{{ url_for('view_flyer', flyer_path='https://backflipp.wishabi.com/flipp/flyers/' ~ flyer['id'] ~ '-' ~ flyer['merchant'] ~ '-' ~ flyer['name'] ~ '?postal_code='~ flyer['postal_code']) }}">
+                <button class="btn-primary">View all Products</button>
+            </a>
+            <!-- In your HTML template -->
+            <div id="map" style="height: 400px;"></div>
+            <p><strong>Closest Store Address:</strong> <span id="storeAddress">Calculating...</span></p>
+            <p><strong>Distance to Closest Store:</strong> <span id="distance">Calculating...</span></p>
+
+            <script>
+                let map;
+                let userLocation;
+
+                // Function to initialize the map
+                function initMap() {
+                    map = new google.maps.Map(document.getElementById("map"), {
+                        center: { lat: userLocation.lat(), lng: userLocation.lng() }, // Use user's location
+                        zoom: 15,
+                    });
+
+                    // Get user's location
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(function(position) {
+                            userLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                            findClosestStore(userLocation);
+                        });
+                    }
+                }
+
+                // Function to find the closest store
+                function findClosestStore(userLocation) {
+                    // Replace with your actual flyer and store data
+                    const flyerData = [
+                        {
+                            storeName: "Store 1",
+                            merchantName: "Merchant A",
+                            latitude: STORE_LATITUDE_1,
+                            longitude: STORE_LONGITUDE_1,
+                        },
+                        {
+                            storeName: "Store 2",
+                            merchantName: "Merchant B",
+                            latitude: STORE_LATITUDE_2,
+                            longitude: STORE_LONGITUDE_2,
+                        },
+                        // Add more stores...
+                    ];
+
+                    // Calculate distances and find the closest store
+                    let closestStore;
+                    let shortestDistance = Infinity;
+
+                    for (const store of flyerData) {
+                        const storeLocation = new google.maps.LatLng(store.latitude, store.longitude);
+                        const distance = google.maps.geometry.spherical.computeDistanceBetween(userLocation, storeLocation);
+
+                        if (distance < shortestDistance) {
+                            closestStore = store;
+                            shortestDistance = distance;
+                        }
+                    }
+
+                    // Display the closest store's marker and information
+                    if (closestStore) {
+                        const storeLocation = new google.maps.LatLng(closestStore.latitude, closestStore.longitude);
+
+                        const storeMarker = new google.maps.Marker({
+                            position: storeLocation,
+                            map,
+                            title: closestStore.storeName,
+                        });
+
+                        document.getElementById("distance").textContent = `Distance to Closest Store: ${Math.round(shortestDistance / 1000)} kilometers`;
+
+                        // Use the Google Geocoding API to get the address
+                        const geocoder = new google.maps.Geocoder();
+                        geocoder.geocode({ location: storeLocation }, (results, status) => {
+                            if (status === "OK" && results[0]) {
+                                document.getElementById("storeAddress").textContent = `Closest Store Address: ${results[0].formatted_address}`;
+                            }
+                        });
+                    }
+                }
+            </script>
+        </div>
+        <br><br>
+    </div>
+    {% endfor %}
+    
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap" async defer></script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Shopping List</title>
+</head>
+<body> 
+    <h1>Shopping List</h1>
+
+    <!-- Search form for adding items to the shopping list -->
+    <form>
+        <input type="text" id="search_query" placeholder="Search for items">
+        <button type="button" onclick="searchProducts()">Search</button>
+    </form>
+    
+    <h2>Shopping List:</h2>
+    <ul>
+        <!-- Display the items in the shopping list -->
+        <!-- Add your code to display the shopping list items here -->
+    </ul>
+    
+    <h2>Search Results:</h2>
+    <div id="search_results">
+        <!-- Display search results dynamically using JavaScript -->
+    </div>
+    
+    <h2>Selected Items:</h2>
+    <ul id="selected_items">
+        <!-- Display selected items here -->
+    </ul>
+    
+    <button id="add_to_list" onclick="addSelectedItemsToList()">Add Selected Items to List</button>
+    
+    <script>
+        // Function to search for products
+        function searchProducts() {
+            const searchQuery = document.getElementById('search_query').value;
+            const searchResults = document.getElementById('search_results');
+            
+            // Clear any previous search results
+            searchResults.innerHTML = '';
+    
+            // Fetch search results using AJAX
+            fetch('/search_products', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({ 'search_query': searchQuery })
+            })
+            .then(response => response.json())
+            .then(data => {
+                data.products.forEach(product => {
+                    const resultItem = document.createElement('div');
+                    resultItem.textContent = `${product.name} - $${product.price} (${product.store})`;
+                    
+                    // Add a click event to add the selected product to the shopping list
+                    resultItem.addEventListener('click', () => {
+                        addSelectedProduct(product);
+                    });
+                    
+                    searchResults.appendChild(resultItem);
+                });
+            })
+            .catch(error => console.error(error));
+        }
+    
+        // Function to add a selected product to the shopping list
+        function addSelectedProduct(product) {
+            // You can implement this function to add the product to the shopping list
+            // For now, let's display an alert with the selected product
+            alert(`Selected: ${product.name} - $${product.price} (${product.store})`);
+        }
+    </script>
+    
+</body>
+</html>
