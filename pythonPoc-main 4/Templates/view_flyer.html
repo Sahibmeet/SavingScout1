@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>View Flyer</title>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+    <!-- Custom Styles -->
+    <style>
+        body {
+            background: #222;
+            font-family: 'Lato', sans-serif;
+            overflow-x: hidden;
+            transition: filter 0.3s; /* Add a transition for smooth effect */
+        }
+
+        h1,
+        h2 {
+            color: #007bff;
+            /* Heading color */
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+
+        .flyer-item {
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 4px;
+            margin: 15px 0;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .container-fluid {
+            padding: 0;
+        }
+
+        h1 {
+            color: #fff;
+            text-transform: uppercase;
+            font-size: 70px;
+            letter-spacing: 8px;
+            font-weight: 900;
+            margin-bottom: 20px;
+            margin-top: 30px;
+        }
+
+        .box {
+            transition: all .2s ease-in-out;
+            z-index: 1000000;
+            
+        }
+
+        .nav-link {
+            color: #1DC2E8 !important;
+            font-weight: 600;
+            font-size: 18px;
+            letter-spacing: 1px;
+            margin-right: 30px;
+        }
+
+        .nav-padding {
+            padding-left: 140px;
+            padding-right: 140px;
+        }
+
+        .my-img {
+            height: 200px;
+            object-fit: contain;
+            margin-bottom: 20px;
+            position: relative;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .box:hover {
+            transform: scale(1.2) !important;
+            z-index: 1000000;
+
+        }
+
+        #modal-product-info {
+            width: 900px;
+            /* height: 500px; */
+            margin: 0 auto;
+            display: none;
+            position: fixed;
+            left: 0;
+            right: 0;
+            top: 50%;
+            border: 1px solid;
+            -webkit-transform: translateY(-50%);
+            -moz-transform: translateY(-50%);
+            -ms-transform: translateY(-50%);
+            -o-transform: translateY(-50%);
+            transform: translateY(-50%);
+            z-index: 9000000;
+            background-color: #fff;
+            border-radius: 14px;
+            border: 1px solid #fff;
+        }
+        .fa-times{
+            position: absolute;
+            top: 6px;
+            right: 10px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        
+        .modal-parent-wrapper{
+            padding-block: 50px;
+            position: relative;
+        }
+
+        .shopping-item {
+            cursor: pointer;
+        }
+
+        .modal-product-wrapper {
+            width: 100%;
+            height: 100%;
+            display: flex;
+        }
+
+        .modal-left,
+        .modal-right {
+            width: 50%;
+            height: 100%;
+        }
+
+        .modal-img-wrap {
+            text-align: center;
+        }
+
+        .modal-info-wrap {
+            padding: 20px;
+        }
+
+        .modal-info-title,
+        .modal-info-price,
+        .modal-info-buynow,
+        .modal-info-validity {
+            margin-bottom: 10px;
+        }
+        .nav-padding {
+                padding-left: 50px;
+                padding-right: 50px;
+            }
+
+        .container-fluid{
+
+            background-color: #fff;
+    padding: 15px;
+    margin: 15px 0;
+    padding-bottom: 15px;
+        border: none;
+        background: #fff;
+        -webkit-mask: conic-gradient(from -45deg at bottom,#000,#000 1deg 89deg,rgba(0,0,0,0) 90deg) 50%/20px 100%;
+        
+        }    
+
+         /* Add the blur effect styles */
+         .blur-background {
+            filter: blur(5px); /* Adjust the blur radius as needed */
+            pointer-events: none; /* Allow interaction with modal */
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark nav-padding">
+        <a class="navbar-brand" href="/">
+            <img src="https://i.ibb.co/YcK5TGf/brochure.png"
+                style="height: 50px; width: 50px; object-fit: contain; margin-right: 30px;" alt="">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/Allflyers">Flyers</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/shopping_list" id="open-modal">Shopping Cart</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav pull right">
+
+                <form action="/get_searched_data" method="GET" style="position: relative; top: 7px; margin-right: 40px;">
+                    <div class="input-group mb-3" style="position: relative; top: 7px; margin-right: 40px;">
+                       
+                            <input type="text" class="form-control" id="search-text" name="global-search"
+                            placeholder="Search store or an item" required id="flyerSearch">
+                            <div class="input-group-append">
+                                <button  class="btn btn-primary" id="search-btn-global">Search</button>
+                            </div>
+                    </div>
+                </form>
+
+                <li class="nav-item" style="display: flex; align-items: center;">
+
+                    <img src="https://i.ibb.co/nCcYNNB/mail.png"
+                        style="height: 30px; width: 30px; object-fit: contain; margin-right: 10px;" alt="">
+                    <a class="nav-link" href="/">{{postal_code}}</a>
+                </li>
+
+            </ul>
+
+        </div>
+    </nav>
+
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <h1>Flyer Details</h1>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-product-info" style="display: none;" data-aos="fade-up">
+        <div class="modal-parent-wrapper">
+            <i class="fa fa-times" id="cross-modal" aria-hidden="true"></i>
+            <div class="modal-product-wrapper">
+                <div class="modal-left">
+                    <div class="modal-flyer-logo" id="modal-flyer-logo">
+                        <img id="modal-flyer-logo-img" src="" alt="">
+                    </div>
+                    <div class="modal-img-wrap" id="modal-img-wrap">
+                        <img id="modal-flyer-img" src="" alt="">
+                    </div>
+                </div>
+                <div class="modal-right" style="margin-top: 20px; padding: 10px; font-variant: small-caps;">
+                    <div class="modal-info-wrap">
+                        <div class="modal-info-title">
+                            <strong><span id="modal-info-title"></span></strong>
+                        </div>
+                        <div class="modal-info-price">
+                            <strong>Price: <span id="modal-info-price"></span></strong>
+                        </div>
+                        <div class="modal-info-validity">
+                            <strong>Valid From: </strong><span id="modal-info-valid-from"></span><br>
+                            <strong> Valid To: </strong><span id="modal-info-valid-to"></span>
+                        </div>
+                        <div class="modal-info-buynow">
+                            <span id="modal-info-buynow"><button class="btn btn-primary cart-check add-to-cart">Add to shopping cart</button></span>
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" id="id-modal" value="">
+                <input type="hidden" id="store-modal" value="">
+            </div>
+        </div>
+    </div>
+    <h2>{{ full_flyer_data['name'] }}</h2>
+    <div class="row" style="padding: 20px;">
+        {% for item in full_flyer_data['items'] %}
+        <div class="col-md-3 box shopping-item" data-aos="fade-up" data-aos-anchor-placement="top-center">
+            <div class="container-fluid col-xs-12">
+            <div class="flyer-item" style="margin-top: 20px; padding: 10px; font-variant: small-caps;">
+                <img src="{{ item['cutout_image_url'] }}" alt="Item Image" class="img-fluid my-img" id="flyer-item-img">
+            
+                <p class="mb-1"><strong>Item Name:</strong> <span class="item-name" id="flyer-item-name"> {{ item['name']
+                        }}</span></p>
+                <p class="mb-1"><strong>Price:</strong><span id="flyer-item-price"> ${{ item['price'] }}</span></p>
+                <p class="mb-1"><strong>Valid From:</strong><span id="flyer-item-valid-from"> {{ item['valid_from'] |
+                        to_date }}</span></p>
+                <p class="mb-1"><strong>Valid To:</strong><span id="flyer-item-valid-to"> {{ item['valid_to'] | to_date
+                        }}</span></p>
+                <input type="hidden" value="{{ item['id'] }}" id="id">
+                
+                <input type="hidden" value="{{ store_name }}" id="store-name">
+            </div>
+        </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div id="err-result-not-found" style="text-align: center;"></div>
+    <script>
+        document.addEventListener("DOMContentLoaded", (event) => {
+            var cart = [];
+            function searchFlyers() {
+                var input = document.getElementById("flyerSearch");
+                var filter = input.value.toUpperCase();
+                var storeitem = document.querySelectorAll(".item-name");
+                var resultsFound = false; // Add a flag to track if results are found
+                for (var i = 0; i < storeitem.length; i++) {
+                    var item = storeitem[i];
+                    var itemName = item.textContent.toUpperCase();
+                    if (itemName.indexOf(filter) > -1) {
+                        item.parentNode.parentNode.parentNode.style.display = "";
+                        resultsFound = true; // Results are found
+                    } else {
+                        item.parentNode.parentNode.parentNode.style.display = "none";
+                    }
+                }
+
+                if (!resultsFound) {
+                    document.getElementById("err-result-not-found").innerHTML = "<span style='color:red'>Not flyers found</span>";
+                }
+                else {
+                    document.getElementById("err-result-not-found").innerHTML = "";
+                }
+            }
+
+            function applyBlur() {
+            // Apply blur effect to the body content
+            document.body.classList.add('blur-background');
+            }
+
+            function removeBlur() {
+            // Remove blur effect from the body content
+            document.body.classList.remove('blur-background');
+            }
+
+            var shoppingElements = document.getElementsByClassName('shopping-item');
+            var imgSrc = document.getElementById("modal-flyer-img")
+            var title = document.getElementById("modal-info-title")
+            var price = document.getElementById("modal-info-price")
+            var validFrom = document.getElementById("modal-info-valid-from")
+            var validTo = document.getElementById("modal-info-valid-to")
+            var modalId = document.getElementById("id-modal")
+            var storeName = document.getElementById("store-modal")
+
+            var checkItemExist ;
+            var flagCheckItemExist = false;
+           
+            
+            for (let i = 0; i < shoppingElements.length; i++) {
+                shoppingElements[i].addEventListener('click', (event) => {
+                    if(localStorage.getItem('order-items')){
+                        flagCheckItemExist = true
+                        checkItemExist =  JSON.parse(localStorage.getItem('order-items'))
+                    }else{
+                        flagCheckItemExist
+                    }
+                    document.getElementsByClassName("cart-check")[0].classList.add("add-to-cart");
+                    if(shoppingElements[i].querySelector("#flyer-item-price").textContent=="" || shoppingElements[i].querySelector("#flyer-item-name").textContent=="" ){
+                      alert("Name Or Price is mission for this product can not be added");
+                      return false;
+                  }
+                    if(flagCheckItemExist){
+                        for(var j=0;j<checkItemExist.length;j++){
+                            if(parseInt(shoppingElements[i].querySelector("#id").value) == parseInt(checkItemExist[j].id)){
+                                document.getElementsByClassName("add-to-cart")[0].classList.remove("btn-primary");
+                                document.getElementsByClassName("add-to-cart")[0].classList.add("btn-success");
+                                document.getElementsByClassName("add-to-cart")[0].textContent = "Added to shopping cart";
+                                document.getElementsByClassName("add-to-cart")[0].classList.remove("add-to-cart");
+                                break;
+                            }else{
+                                document.getElementsByClassName("add-to-cart")[0].classList.add("btn-primary");
+                                document.getElementsByClassName("add-to-cart")[0].classList.remove("btn-success");
+                                document.getElementsByClassName("add-to-cart")[0].textContent = "Add to shopping cart";
+                     
+                            }
+                        }
+                    }
+                    document.getElementById("modal-product-info").style.display = "block";
+                    console.log("This is test",shoppingElements[i].querySelector("#id").value)
+                    // Select child elements using querySelector
+                    
+                    imgSrc.setAttribute('src', shoppingElements[i].querySelector("#flyer-item-img").getAttribute('src'));
+                    title.textContent = shoppingElements[i].querySelector("#flyer-item-name").textContent;
+                    price.textContent = shoppingElements[i].querySelector("#flyer-item-price").textContent;
+                    validFrom.textContent = shoppingElements[i].querySelector("#flyer-item-valid-from").textContent;
+                    validTo.textContent = shoppingElements[i].querySelector("#flyer-item-valid-to").textContent;
+                    modalId.value  = shoppingElements[i].querySelector("#id").value;
+                    storeName.value  = shoppingElements[i].querySelector("#store-name").value;
+                    
+
+                    if(shoppingElements[i].querySelector("#flyer-item-price").textContent=="" || shoppingElements[i].querySelector("#flyer-item-name").textContent=="" ){
+                        alert("Name Or Price is missing for this product can not be added");
+                        document.getElementsByClassName("add-to-cart")[0].classList.add("btn-primary");
+                        document.getElementsByClassName("add-to-cart")[0].classList.remove("btn-success");
+                        document.getElementsByClassName("add-to-cart")[0].textContent = "Add to shopping cart";
+                        document.getElementsByClassName("cart-check")[0].classList.add("add-to-cart");
+                        return false;
+                    }
+                });
+            }
+
+                document.getElementById("cross-modal").addEventListener('click',()=>{
+                document.getElementById("modal-product-info").style.display = "none";
+            });
+            
+            document.getElementsByClassName("add-to-cart")[0].addEventListener('click',()=>{
+                document.getElementsByClassName("add-to-cart")[0].classList.remove("btn-primary");
+                document.getElementsByClassName("add-to-cart")[0].classList.add("btn-success");
+                document.getElementsByClassName("add-to-cart")[0].textContent = "Added to shopping cart";
+                document.getElementsByClassName("add-to-cart")[0].classList.remove("add-to-cart");
+                if(localStorage.getItem('order-items')){
+                   var items =  JSON.parse(localStorage.getItem('order-items'))
+                   for(var i=0;i<items.length;i++){
+                    cart.push(items[i]);
+                   }
+                }    
+                function filterVal(arrVal,storeMatch){
+                    for(var i=0;i<arrVal.length;i++){
+                        if(arrVal[i].storeName == storeMatch){
+                            return  arrVal[i]
+                        }
+                    }
+                }
+                cart.push({
+                    id : modalId.value,
+                    imgUrl : imgSrc.getAttribute('src'),
+                    productTitle : title.textContent,
+                    price : price.textContent,
+                    validFrom : validFrom.textContent,
+                    validTo : validTo.textContent,
+                    qty:1,
+                    store_name:storeName.value,
+                    cart_extras:filterVal(JSON.parse(localStorage.getItem('cart-extras')),storeName.value)
+                })
+                localStorage.setItem('order-items',JSON.stringify(cart));
+                cart = []
+            })
+        });
+    </script>
+    <!-- Include Bootstrap JavaScript and jQuery -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqGvRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script>
+        AOS.init();
+    </script>
+</body>
+
+</html>

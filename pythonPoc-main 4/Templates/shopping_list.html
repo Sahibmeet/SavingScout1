@@ -1,0 +1,1522 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Shopping List</title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css">
+    <style>
+        body {
+            background-color: #222;
+        }
+
+        body {
+            font-family: 'Lato', sans-serif;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        h1,
+        h2 {
+            color: #fff;
+        }
+
+        /* Additional styling for blocks */
+        .block {
+            background-color: #1DC2E8;
+            padding: 10px;
+            border-radius: 20px;
+            margin-bottom: 10px;
+            color: #fff;
+            font-weight: 700;
+            text-transform: uppercase;
+            text-align: center;
+            margin-bottom: 30px;
+            transition: all .2s ease-in;
+        }
+
+
+        .block:hover {
+            transform: scale(1.2);
+        }
+
+        /* Style the search form and button */
+        form {
+            margin-bottom: 20px;
+        }
+
+
+        /* Style the shopping list items */
+        .container ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .container ul li {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        /* Style the selected items */
+        #selected_items {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #selected_items li {
+            background-color: #28a745;
+            color: #fff;
+            padding: 10px;
+            border: 1px solid #1e7e34;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        /* Style the "Add Selected Items to List" button */
+        #add_to_list {
+            padding: 10px 20px;
+            background-color: #dc3545;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        #add_to_list:hover {
+            background-color: #c82333;
+        }
+
+        .nav-link {
+            color: #1DC2E8 !important;
+            font-weight: 600;
+            font-size: 18px;
+            letter-spacing: 1px;
+            margin-right: 30px;
+        }
+
+        .nav-padding {
+            padding-left: 140px;
+            padding-right: 140px;
+        }
+
+        h1 {
+            color: #fff;
+            text-transform: uppercase;
+            font-size: 70px;
+            letter-spacing: 7px;
+            font-weight: 900;
+            margin-top: 30px;
+        }
+
+        h2 {
+            color: #fff;
+            text-transform: uppercase;
+            font-size: 20px;
+            font-weight: 900;
+            margin-top: 30px;
+            margin-bottom: 20px;
+        }
+
+        .results {
+            color: #c82333;
+            font-weight: 500;
+
+        }
+
+        input {
+            padding: 30px !important;
+        }
+
+        input::placeholder {
+            color: #222 !important;
+            font-family: 'Lato', sans-serif;
+        }
+
+        .shopping-cart {
+            color: #FFF;
+            padding-inline: 125px;
+        }
+
+        .shopping-cart-wrapper {
+            width: 100%;
+            display: flex;
+
+        }
+
+        .cart-left {
+            width: 65%;
+            padding: 20px;
+        }
+
+        .cart-info-right {
+            width: 35%;
+            padding: 20px;
+        }
+
+        .cart-right-info-contiue-tocheckout {
+            text-align: center;
+        }
+
+        .subtotal-price {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .shipping-price {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .tax-price {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid #000;
+            padding-bottom: 10px;
+        }
+
+        .item-list:not(:last-child) {
+            border-bottom: 1px solid #dee2e6;
+            padding-bottom: 20px;
+        }
+
+        .item-list {
+            color: #000;
+        }
+
+        .item-list-upper {
+            display: flex;
+            justify-content: space-between;
+            text-align: center;
+        }
+
+        .item-img img {
+            width: 150px;
+            height: 150px;
+            padding: 10px;
+        }
+
+        .item-div {
+
+        padding-bottom: 15px;
+        border: none;
+        background: #e9ecef;
+        -webkit-mask: conic-gradient(from -45deg at bottom,#000,#000 1deg 89deg,rgba(0,0,0,0) 90deg) 50%/20px 100%;
+        
+        }
+
+        .item-list-qty span input {
+            width: 45px;
+            padding: unset !important;
+            border-radius: 4px;
+        }
+
+        .item-list-lower {
+            display: flex;
+            flex-direction: row-reverse;
+        }
+
+        .estimated-total-price {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .item-list-qty {
+            margin-right: 20px;
+            margin-top: 6px;
+        }
+
+        .mb-20 {
+            margin-bottom: 20px;
+        }
+
+        .item-list-area {
+            overflow-y: auto;
+            height: 500px;
+            padding: 20px;
+            background: #fff;
+            font-weight: 600;
+            border-radius: 6px;
+        }
+
+        #remove-item {
+            cursor: pointer;
+        }
+
+        .cart-title {
+            background: #fff;
+            border-radius: 6px;
+            padding: 10px;
+            color: #000;
+            font-weight: 600;
+        }
+
+        .cart-right-info-wrapper {
+            background: #fff;
+            padding: 20px;
+            height: 100%;
+            border-radius: 6px;
+        }
+
+        .cart-right-info-price-total-section {
+            color: #000;
+        }
+
+        .cart-right-info-contiue-tocheckout button {
+            width: 80%;
+        }
+
+        /* Extra Small (XS) - up to 576px */
+        @media (max-width: 576px) {
+            .cart-left {
+                width: 100%;
+            }
+
+            .cart-info-right {
+                width: 100%;
+            }
+
+            .shopping-cart-wrapper {
+                flex-direction: column;
+            }
+
+            .cart-right-info-contiue-tocheckout button {
+                width: 54%;
+            }
+        }
+
+        /* Small (SM) - 576px to 768px */
+        @media (min-width: 577px) and (max-width: 768px) {
+            .cart-left {
+                width: 100%;
+            }
+
+            .cart-info-right {
+                width: 100%;
+            }
+
+            .shopping-cart-wrapper {
+                flex-direction: column;
+            }
+
+            .cart-right-info-contiue-tocheckout button {
+                width: 54%;
+            }
+        }
+
+        /* Medium (MD) - 768px to 992px */
+        @media (min-width: 769px) and (max-width: 992px) {
+            .cart-left {
+                width: 100%;
+            }
+
+            .cart-info-right {
+                width: 100%;
+            }
+
+            .shopping-cart-wrapper {
+                flex-direction: column;
+            }
+
+            .cart-right-info-contiue-tocheckout button {
+                width: 54%;
+            }
+        }
+
+        /* Large (LG) - 992px to 1200px */
+        @media (min-width: 993px) and (max-width: 1200px) {
+            .cart-left {
+                width: 100%;
+            }
+
+            .cart-info-right {
+                width: 100%;
+            }
+
+            .shopping-cart-wrapper {
+                flex-direction: column;
+            }
+
+            .cart-right-info-contiue-tocheckout button {
+                width: 54%;
+            }
+        }
+
+        .cart-right-info-contiue-input {
+            color: #000;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .cart-right-info-contiue-input input {
+            padding: 8px !important;
+            border-radius: 6px;
+        }
+
+        .item-flex-r {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .m-l-5 {
+            margin-left: 5px;
+        }
+
+        .print-list,
+        .delete-list {
+            cursor: pointer;
+        }
+
+        .searched-items {
+            padding: 10px;
+            background: #007bff;
+            border-radius: 6px;
+            color: #fff;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        .append-item-data {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .modal-product-list-item {
+            width: autopx;
+            height: 600px;
+            margin: 0 auto;
+            display: table;
+            position: fixed;
+            left: 0;
+            right: 0;
+            top: 60%;
+            border: 1px solid;
+            -webkit-transform: translateY(-50%);
+            -moz-transform: translateY(-50%);
+            -ms-transform: translateY(-50%);
+            -o-transform: translateY(-50%);
+            transform: translateY(-50%);
+            z-index: 9000000;
+            background-color: #fff;
+            border-radius: 14px;
+            border: 1px solid #fff;
+            overflow-y: auto;
+            padding: 10px;
+            margin: 12px;
+        }
+
+        .flyer-item.shopping-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .flyer-item.shopping-item img {
+            width: 150px;
+            height: 150px;
+        }
+
+        .shopping-item button {
+            height: 40px;
+            border-radius: 11px;
+            width: 200px;
+        }
+
+        #flyer-item-name a {
+            color: #000;
+        }
+
+        #cross-modal {
+            position: absolute;
+            right: 2;
+            top: 5px;
+            right: 11px;
+            font-size: 20px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .modal-product-append{
+            margin-top: 20px;
+        }
+        #table-list-item td,th{
+            padding: 10px;
+        }
+        .cart-right-info-contiue-tocheckout{
+            display: flex;
+        }
+        .cart-right-info-contiue-tocheckout input{
+            margin-right: 5px;
+            padding: 5px !important;
+            border-radius: 6px;
+        }
+        .loader-flyer , .loader-flyer-nodata{
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            margin-top: 200px;
+        }
+                .nav-padding {
+            padding-left: 50px;
+            padding-right: 50px;
+        }
+
+        #loader-flyer svg{
+            width: 20% !important;
+        }
+        .zigzag{
+            padding: 15px;
+    margin: 15px 0;
+    padding-bottom: 15px;
+    border: none;
+    background: #e9ecef;
+    -webkit-mask: conic-gradient(from -45deg at bottom,#000,#000 1deg 89deg,rgba(0,0,0,0) 90deg) 50%/20px 100%;
+}
+        .image-item-store img{
+            height: 50px !important;
+            height: 50px !important;
+        }
+    </style>
+
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark nav-padding">
+        <a class="navbar-brand" href="/">
+            <img src="https://i.ibb.co/YcK5TGf/brochure.png"
+                style="height: 50px; width: 50px; object-fit: contain; margin-right: 30px;" alt="">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/Allflyers">Flyers</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/shopping_list" id="open-modal">Shopping Cart</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav pull right">
+
+                <li class="nav-item" style="display: flex; align-items: center;">
+
+                    <img src="https://i.ibb.co/nCcYNNB/mail.png"
+                        style="height: 30px; width: 30px; object-fit: contain; margin-right: 10px;" alt="">
+                    <a class="nav-link" id="search-text-postcode" href="/">{{postal_code}}</a>
+                </li>
+
+            </ul>
+
+        </div>
+    </nav>
+    <div class="loader-flyer" id="loader-flyer">
+        <div id="animation-container"></div>
+        <div style="color: #fff;">Hold on fetching the data...</div>
+    </div>  
+    <div class="row loader-hide" style="display: none;" >
+        <div class="col-lg-12 text-center">
+            <h1 data-aos="flip-up">Shopping List</h1>
+        </div>
+    </div>
+    <div class="shopping-cart loader-hide" style="display: none;" > 
+        <div class="shopping-cart-wrapper" id="shopping-cart-wrapper">
+            <div class="cart-left">
+                <div class="cart-title mb-20">
+                    Cart (
+                    <span class="count-item-cart"></span>
+                    )
+                </div>
+                <div class="item-list-area"></div>
+            </div>
+            <div class="cart-info-right">
+                <div class="cart-right-info-wrapper">
+                    <div class="cart-right-info-checkout-section mb-20">
+                        <div class="cart-right-info-contiue-input mb-20">
+                            <input type="text" id="search-item" placeholder="Add an item" style="width: 100%;margin-bottom:20px">
+                            <span class="item-flex-r print-list"><i class="fa fa-print" aria-hidden="true"></i><span
+                                    class="m-l-5"> Print</span></span>
+                            <span class="item-flex-r delete-list clear-list"><i class="fa fa-trash"
+                                    aria-hidden="true"></i><span class="m-l-5"> Clear List</span></span>
+                        </div>
+                        <div class="cart-right-info-contiue-tocheckout mb-20">
+                            <input type="text" placeholder="Enter Email" id="email-address" required>
+                            <button class="btn btn-primary send-list-email">Send list</button>
+                        </div>
+                    </div>
+                    <div class="cart-right-info-price-total-section">
+                        <div class="cart-right-info-total mb-20">
+                            <div class="subtotal-price mb-20">
+                                <div class="subtotal-price-left">
+                                    <strong>Subtotal</strong>
+                                    (
+                                    <span class="count-item-cart"></span>
+                                    )
+                                </div>
+                                <div class="subtotal-price-right"></div>
+                            </div>
+                            <div class="shipping-price mb-20" style="display: none;">
+                                <div class="shipping-price-left">
+                                    <strong></strong>
+                                </div>
+                                <div class="shipping-price-right"></div>
+                            </div>
+                            <div class="tax-price mb-20" style="display: none;">
+                                <div class="tax-price-left">
+                                    <strong></strong>
+                                </div>
+                                <div class="tax-price-right"></div>
+                            </div>
+                            <div class="estimated-total-price mb-20" style="display: none;">
+                                <div class="estimated-total-price-left">
+                                    <strong></strong>
+                                </div>
+                                <div class="estimated-total-price-right"></div>
+                            </div>
+                            <div class="append-list-module">
+                                <div class="append-item-data"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="shopping-cart-nodata" style="text-align: center; display:none;margin-top: 40px;">
+        <span style="color: red;">No items added in the cart</span>
+    </div>
+    <div class="modal-product-list-item" style="display:none;">
+        <div style="position: fixed; top: 10px; right: 10px;">
+        <i class="fa fa-times" id="cross-modal" aria-hidden="true"></i>
+        </div>
+        <div class="modal-product-append"></div>
+    </div>
+    <div style="display: none;" id="noResultsMessage"></div>
+    <div  style="display: none;" id="table-list-item-parent">
+        <table id="table-list-item" border="1" style="white-space: nowrap;padding:10px;text-align:center">
+            <tr><td colspan="4">Shopping List</td></tr>
+            <tr id="list-head-pdf">
+                <td>Sr No.</td>
+                <td>Product Title</td>
+                <td>Store Name</td>
+                <td>Price</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- Include Bootstrap JavaScript and jQuery -->
+     <!-- Add your Google API key here -->
+     <script
+     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC7jljWcsh-PZYVKD5m4JfmIOvpaZWX3V8&libraries=places"
+     async
+     defer
+   ></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js" integrity="sha512-jEnuDt6jfecCjthQAJ+ed0MTVA++5ZKmlUcmDGBv2vUI/REn6FuIdixLNnQT+vKusE2hhTk2is3cFvv5wA+Sgg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script src=
+    "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
+        </script>
+        <script src=
+     "https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js">
+        </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script>
+        AOS.init();
+        var animation = bodymovin.loadAnimation({
+
+            container: document.getElementById('animation-container'),
+            
+            path: '../static/json/loaderGrocerry.json',
+            
+            renderer: 'svg',
+            
+            loop: true,
+            
+            autoplay: true,
+            
+            name: "Data Load Animation",
+            }); 
+        document.addEventListener("DOMContentLoaded", (event) => {
+            if(!localStorage.getItem('order-items')){
+                   localStorage.setItem('order-items',JSON.stringify([]))
+            }
+            document.getElementsByClassName('send-list-email')[0].addEventListener('click',(event)=>{
+                if(JSON.parse(localStorage.getItem('order-items')).length!=0)
+                {
+                const { jsPDF } = window.jspdf;
+                event.target.classList.remove('btn-sucess')
+                event.target.classList.add('btn-warning')
+                event.target.textContent="Sending"
+                let doc = new jsPDF('l', 'mm', [1500, 1400]);
+                let pdfjs = document.querySelector('#table-list-item');
+                
+                doc.html(pdfjs, {
+                    callback: function (doc) {
+                        const pdfDataUri = doc.output('datauristring');
+        
+                        // Convert the data URI to Blob
+                        const blob = dataURItoBlob(pdfDataUri);
+                        const formData = new FormData();
+                        formData.append('pdfFile', blob, 'sample.pdf');
+                        const apiUrl = '/generate_pdf';
+                        // fetch api
+                        fetch(apiUrl, {
+                            method: 'POST',
+                            body: formData
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log('Response from server:', data);
+                            const pdfUrl = data;
+                            const email = document.getElementById("email-address").value;
+                            const url = `/mail_send`;
+                            fetch(url, {
+                                method: 'POST',
+                                headers: {
+                                  'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({
+                                    email: email,
+                                    pdfUrl: pdfUrl
+                                })
+                              })
+                                .then(response => {
+                                  if (response.ok) {
+                                    return response.json(); // Assuming the response is in JSON format.
+                                  } else {
+                                    throw new Error('Failed to fetch data');
+                                  }
+                                })
+                                .then(data => {
+                                    event.target.classList.add('btn-sucess')
+                                    event.target.classList.remove('btn-warning')
+                                    event.target.textContent="Send list"
+                            const email = document.getElementById("email-address").value="";
+
+                                  console.log(data)
+                                })
+                                .catch(error => {
+                                    console.log(`This is errors ${error}`)
+                                  // Handle errors, such as network issues or request failures
+                                });
+                            console.log(`this is html ${data}`)
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
+                        console.log(blob);
+                    },
+                    x: 12,
+                    y: 12,
+                });  
+                // Function to convert Data URI to Blob
+                function dataURItoBlob(dataURI) {
+                    const byteString = atob(dataURI.split(',')[1]);
+                    const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+                    const ab = new ArrayBuffer(byteString.length);
+                    const ia = new Uint8Array(ab);
+
+                    for (let i = 0; i < byteString.length; i++) {
+                        ia[i] = byteString.charCodeAt(i);
+                    }
+
+                    return new Blob([ab], { type: mimeString });
+                }
+                }else{
+                    alert("Shopping list is empty")
+                }
+            })
+            document.getElementsByClassName('print-list')[0].addEventListener('click',function(){
+                if(JSON.parse(localStorage.getItem('order-items')).length!=0)
+                {
+                const { jsPDF } = window.jspdf;
+
+                let doc = new jsPDF('l', 'mm', [1500, 1400]);
+                let pdfjs = document.querySelector('#table-list-item');
+                
+                doc.html(pdfjs, {
+                    callback: function (doc) {
+                            doc.save('shopping-list.pdf')
+                    },
+                    x: 12,
+                    y: 12,
+                });  
+                // Function to convert Data URI to Blob
+                function dataURItoBlob(dataURI) {
+                    const byteString = atob(dataURI.split(',')[1]);
+                    const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+                    const ab = new ArrayBuffer(byteString.length);
+                    const ia = new Uint8Array(ab);
+
+                    for (let i = 0; i < byteString.length; i++) {
+                        ia[i] = byteString.charCodeAt(i);
+                    }
+
+                    return new Blob([ab], { type: mimeString });
+                }
+            }else{
+                alert("Shopping list is empty")
+
+            }
+            })
+           
+           function builtCart(){ 
+            var orderItem = localStorage.getItem('order-items');
+            var parserd = JSON.parse(orderItem);
+            if (orderItem) {
+                if (parserd.length==0) {
+                    document.getElementsByClassName("count-item-cart")[0].textContent = 0+' Items';
+                    document.getElementsByClassName('item-list-area')[0].innerHTML = `<div style="text-align:center;color:red">No Items in cart</div>`
+                    document.getElementsByClassName('subtotal-price')[0].style.display = 'none'
+                } else {
+                    document.getElementsByClassName('shopping-cart-nodata')[0].style.display = 'none';
+                    document.getElementsByClassName('subtotal-price')[0].style.display = 'flex'
+
+                }
+            } else {
+                console.log("Insize order item else" )
+
+                document.getElementsByClassName("count-item-cart")[0].textContent = 0+' Item';
+                document.getElementsByClassName('item-list-area')[0].innerHTML = `<div style="text-align:center;color:red">No Items in cart</div>`
+                document.getElementsByClassName('subtotal-price')[0].style.display = 'flex'
+            }
+            if(JSON.parse(localStorage.getItem('order-items')).length!=0)
+            {
+            document.getElementById("table-list-item").innerHTML=`<tr><td colspan="4">Shopping List</td></tr><tr id="list-head-pdf">
+                <td>Sr No.</td>
+                <td>Product Title</td>
+                <td>Store Name</td>
+                <td>Price</td>
+            </tr>`
+           
+           
+            var html = ``;
+            var totalPrice = 0;
+            var sepPrice;
+            var shippingPrice = 15;
+            var tax = 0;
+            var estimatedTotal = 0;
+            var totalDiv = document.getElementsByClassName('count-item-cart');
+            var listPdfHtml = ``;
+            var filteredCart = []
+            const result = [];
+
+            parserd.forEach(item => {
+                const storeName = item.store_name;
+                const thumbnail_url = item.cart_extras.thumbnailImg
+                const distance = item.cart_extras.distance;
+                const address = item.cart_extras.address
+                const existingStore = result.find(store => store.store_name === storeName);
+            
+                // Validate and transform the price field if it's inconsistent
+                
+            
+                if (existingStore) {
+                    existingStore.items.push({ ...item });
+                } else {
+                    result.push({
+                        store_name: storeName,
+                        thumbnail_url:thumbnail_url,
+                        distance:distance,
+                        address:address,
+                        items: [{ ...item }]
+                    });
+                }
+               
+            });
+            
+
+          
+            
+            if (parserd.length > 1) {
+                for (var i = 0; i < totalDiv.length; i++) {
+                    totalDiv[i].textContent = ' ' + parserd.length + ' Items' + ' ';
+                }
+            } else {
+                for (var i = 0; i < totalDiv.length; i++) {
+                    totalDiv[i].textContent = ' ' + parserd.length + ' Item' + ' ';
+                }
+            }
+            var countItems = 1
+            console.log('this is store name',result);
+            for (var i = 0; i < result.length; i++) {
+                html +=`<div style="text-align:center; margin-bottom:25px;"><span class='image-item-store'>${result[i].thumbnail_url}</span></div>`;
+                listPdfHtml+=`<tr><strong><td colspan='3'>Merchant - ${result[i].store_name} || Distance - ${result[i].distance} || Address - ${result[i].address}</td></strong></tr>`
+                result[i].items.map((item)=>{
+                    html += `<div class="item-list mb-20">
+                        <div class="item-list-upper">
+                            <div class="item-div">
+                            <div class="item-img"><img src='${item.imgUrl}'></div>
+                            </div>
+                            <div class="item-title">${item.productTitle} (${item.store_name})</div>
+                            <div class="item-price">${item.price}</div>
+                        </div>
+                        <div class="item-list-lower">
+                            <div class="item-list-remove">
+                                <span data-id="${item.id}" id="remove-item" class="remove-item btn btn-primary">Remove</span>
+                            </div>
+                            <div class="item-list-qty">
+                                <span><input type="number"  data-id="${item.id}" min="1" value="1" id="item-qty" class="item-qty"></span>
+                            </div>
+                        </div>
+                    </div>`;
+                    listPdfHtml+=`<tr>
+                        <td>${countItems++}</td>
+                        <td>${item.productTitle}</td>
+                        <td>${item.store_name}</td>
+                        <td>${item.price}</td>
+                    </tr>`
+                }) 
+                
+            
+            }
+            listPdfHtml+=`<tr>
+                <td colspan='4' style="text-align:right">Total : <span style="font-weight:600">$<span id='append-total-price-tobill'></span></span></td>
+            </tr>`
+            const h2 = document.getElementById("list-head-pdf");
+            h2.insertAdjacentHTML("afterend", listPdfHtml);
+            document.getElementsByClassName('item-list-area')[0].innerHTML = html;
+            function calculatePrice() {
+                console.log(parserd);
+                totalPrice = 0;
+                for (var t = 0; t < parserd.length; t++) {
+                    console.log(`This is newnnewnnew e ${parserd[t].price}`)
+                    
+                    if ((parserd[t].price).includes("$")) {
+                        if (parserd[t].price.length == 1 && parserd[t].price == '$') {
+                            totalPrice += 0;
+                        } else {
+                        
+
+                            sepPrice = parserd[t].price.split("$");
+                            console.log(`This is sep price ${sepPrice[1]}`)
+                            totalPrice += parseFloat(sepPrice[1]) * parseFloat(parserd[t].qty);
+                            console.log(`This is sep price ${totalPrice}`)
+                            
+                        }
+
+                    } else {
+                        if(parserd[t].price==""){
+                            console.log("Inside epty price")
+                            totalPrice +=0;
+                        }else{
+                            console.log("Inside  price")
+                        totalPrice += parseFloat(parserd[t].price) * parseFloat(parserd[t].qty);
+                        }
+                    }
+
+                }
+                document.getElementById('append-total-price-tobill').textContent = totalPrice;
+                console.log("THis is the total price", totalPrice)
+                if (totalPrice <= 35) {
+                    document.getElementsByClassName('shipping-price-right')[0].textContent = '$' + shippingPrice;
+                } else {
+                    document.getElementsByClassName('shipping-price-right')[0].textContent = '$' + 0;
+                    shippingPrice = 0;
+                }
+                tax = (13 * totalPrice.toFixed('2')) / 100;
+                document.getElementsByClassName('tax-price-right')[0].textContent = '$' + tax.toFixed(2);
+                document.getElementsByClassName('subtotal-price-right')[0].textContent = '$' + totalPrice.toFixed(2);
+                estimatedTotal = tax + totalPrice + shippingPrice;
+                document.getElementsByClassName('estimated-total-price-right')[0].textContent = '$' + estimatedTotal.toFixed(2);
+            }
+            var temp;
+            var rmItem = document.getElementsByClassName('remove-item');
+            for (var k = 0; k < rmItem.length; k++) {
+                rmItem[k].addEventListener('click', (event) => {
+                   
+                    var dataId = event.currentTarget.getAttribute('data-id');
+                    if (dataId) {
+                        // Handle the click event using the dataId
+                        console.log("Clicked on item with data-id: " + dataId);
+                        for (i = 0; i < parserd.length; i++) {
+                            if (parseInt(parserd[i].id) == parseInt(dataId)) {
+                                temp = i;
+                                break;
+                            }
+                        }
+                        if (temp > -1) {
+                            parserd.splice(temp, 1);
+                            localStorage.setItem('order-items', JSON.stringify(parserd));
+                            location.reload();
+                        }
+                    } else {
+                        console.log("Data-id attribute not found on the clicked element.");
+                    }
+                });
+            }
+
+            calculatePrice();
+
+            var qtyElem = document.getElementsByClassName('item-qty');
+            for (var i = 0; i < qtyElem.length; i++) {
+                qtyElem[i].addEventListener('change', (function (index) {
+                    return function () {
+                        qty = qtyElem[index].value;
+                        dataId = qtyElem[index].getAttribute('data-id');
+                        for (var j = 0; j < parserd.length; j++) {
+                            if (parserd[j].id == dataId) {
+                                parserd[j].qty = qty;
+                            }
+                        }
+                        localStorage.setItem('order-items', JSON.stringify(parserd));
+                        calculatePrice();
+                    };
+                })(i));
+            }
+            }
+        }
+
+        builtCart();
+            // New code for shopping list 
+            var searchItem = document.getElementById("search-item");
+            var searchKeyword = searchItem.value;
+            var suggestionMerchantNew = [];
+            var countData = 0;
+            document.getElementsByClassName('clear-list')[0].addEventListener('click', () => {
+                localStorage.removeItem('order-items');
+                location.reload();
+            })  
+
+            searchItem.addEventListener('keypress', (event) => {
+                if (event.key === "Enter") {
+                    searchItem = document.getElementById("search-item");
+                    searchKeyword = searchItem.value;
+                    if(searchKeyword.trim()==""){
+                        alert("Please enter a valid input")
+                    }
+                    countData = 0;
+                    if (suggestionMerchantNew.length != 0) {
+                        function builtArray() {
+                            var flagCheck = false;
+                            console.log("THis is new sugesetion list",suggestionMerchantNew)
+                            suggestionMerchantNew.forEach((item, index) => {
+                                // Display products for other merchants that contain the search keyword
+                                item.products.forEach((product, i) => {
+                                    console.log(product.name)
+                                    if(product.name!=null)
+                                    {
+                                    if (product.name.toLowerCase().includes(searchKeyword.toLowerCase())) {
+                                        countData++;
+                                        flagCheck = true;
+                                    }
+                                    }
+                                });
+                            });
+
+                            if (!flagCheck) {
+                                const appendElement = document.getElementsByClassName("append-item-data");
+                                const htmlString = `<span class="searched-items">
+                                        <span class="search-item-list-left">
+                                            <input type="checkbox" name="" id="" style='display:none'>
+                                        </span>
+                                        <span class="search-item-list-right">
+                                            <span  >${searchKeyword}</span>
+                                            <span class='click-count' data-search='${searchKeyword}'>${countData} Deals</span>
+                                        </span>
+                                    </span>
+                                `;
+                                appendElement[0].innerHTML += htmlString;
+                            } else {
+                                const parentElement = document.getElementsByClassName("search-item-list-heading")[0];
+                                const htmlString = `<span class="searched-items">
+                                        <span class="search-item-list-left">
+                                            <input type="checkbox" name="" id="" style='display:none'>
+                                            <span style='display:none' >${searchKeyword}</span>
+                                        </span>
+                                        <span class="search-item-list-right" data-search='${searchKeyword}'>
+                                            <span>${searchKeyword}</span>
+                                            <span class='click-count' >${countData} Deals</span>
+                                        </span>
+                                    </span>
+                                `;
+                                const appendElement = document.getElementsByClassName("append-item-data");
+                                appendElement[0].innerHTML += htmlString;
+                                // document.getElementsByClassName('search-item-list-heading-search')[0].style.display = 'block'
+                                function createShoppingList(searchItem) {
+                                    console.log(suggestionMerchantNew)
+                                    html = ''
+                                    suggestionMerchantNew.forEach((item, index) => {
+                                        item.products.forEach((product, i) => {
+                                            if(product.name!=null)    
+                                            {
+                                            if (product.name.toLowerCase().includes(searchItem)) {
+                                                console.log(`This is product ${JSON.stringify(product)}`);
+                                                var btnAppend = ''
+                                                if(JSON.parse(localStorage.getItem('order-items')).length!=0)
+                                                {
+                                                for(var i=0;i<JSON.parse(localStorage.getItem('order-items')).length;i++)
+                                                {
+                                                    if(JSON.parse(localStorage.getItem('order-items'))[i].id == product.id)
+                                                    {
+                                                        btnAppend = '<button class="btn-success  cart-check">Added to shopping list</button>';
+                                                        break;
+                                                    }else{
+                                                        btnAppend = '<button class="btn-primary add-to-cart cart-check">Add to shopping list</button>';
+                                                    }
+                                                }
+                                                }else{
+                                                    btnAppend = '<button class="btn-primary add-to-cart cart-check">Add to shopping list</button>';
+                                                }
+                                                html += `<div class=" col-md-12 row flyer-item shopping-item" style="font-variant: small-caps;">
+                                                         <div class="col-md-12 merchant_logo_searched" id="merchant-img" style="text-align:center; margin-bottom:20px;"><img style="width: 150px; height: 100px; object-fit: contain;" src="${product.merchant_logo}"></div>
+                                                         <div class="zigzag">
+                                                         <img src="${product.product_img}" alt="Item Image" class="img-fluid my-img" id="flyer-item-img">
+                                                         </div>
+                                                         <div class="col-md-3">
+                                                         <p><strong>Item Name:</strong> <span class="item-name"><a href="#" id="flyer-item-name" title=" ${product.name}">${(product.name).substr(0, 20)}...</a></span></p>
+                                                         <p><strong>Price:</strong><span id="flyer-item-price">$${product.price}</span></p>
+                                                         <p><strong>Valid To:</strong><span id="flyer-item-valid-to"> ${formatDate(product.valid_to)}</span></p>
+                                                         <p><strong>Valid From:</strong><span id="flyer-item-valid-from"> ${formatDate(product.valid_from)}</span></p>
+                                                         </div>
+                                                         <div class="get-directions col-md-3" data-merchant="${product.merchant}">
+                                                            <p><strong>Store Address:</strong> <a href= "" <span id="storeAddress">Calculating...</span></a></p>
+                                                            <p><strong>Distance:</strong><span id="distance">Calculating...</span></p>
+                                                         </div>
+                                                        <div class="add-to-shopping-list-shopping-item col-md-3" style="text-align:center;">
+                                                         ${btnAppend}
+                                                         </div>
+                                                         <input type="hidden" value=" ${product.id}" id="id">
+                                                         <input type="hidden" value=" ${product.merchant}" id="merchantItemName">
+                                                         </div>`;
+                                                        flagCheck = true;
+                                            }
+                                        }
+                                        });
+                                    })
+                                    function runDirection(){
+                                        var searchKeywordPostCode = document.getElementById("search-text-postcode").textContent;
+                                        setTimeout(function(){
+                                          const userPostalCode = searchKeywordPostCode;
+                                          // Call the function to update addresses and distances for all merchants.
+                                          updateAllDistancesAndAddresses(userPostalCode);
+                                  
+                                          var directionIcons = document.querySelectorAll(".get-directions");
+                                  
+                                          directionIcons.forEach(function (icon) {
+                                            icon.addEventListener("click", function (event) {
+                                              event.preventDefault();
+                                  
+                                              // Get the merchant name from the data attribute
+                                              var merchantName = icon.getAttribute("data-merchant");
+                                  
+                                              // Open a new tab with Google Maps directions
+                                              var directionsUrl =
+                                                "https://www.google.com/maps/dir/?api=1&destination=" +
+                                                merchantName;
+                                              window.open(directionsUrl, "_blank");
+                                            });
+                                          });
+                                        },7000)
+                                          // Geocode the user's postal code
+                                          //geocodeUserPostalCode('{{ postal_code }}');  // Replace '{{ postal_code }}' with the actual user's postal code
+                                  
+                                          var btnenv = document.getElementsByClassName('view-allp');
+                                          for(var j=0;j<btnenv.length;j++)
+                                            {
+                                              btnenv[j].addEventListener('click', (event) => {
+                                        console.log("working for btn");
+                                        var itemVal = event.target.parentNode.parentNode.parentNode;
+                                        
+                                        var address = itemVal.querySelector('#storeAddress').textContent;
+                                        var distance = itemVal.querySelector('#distance').textContent;
+                                        var thumbnailImg = itemVal.querySelector('#item-logo').innerHTML;
+                                        var storeName = itemVal.querySelector('#store-name').textContent;
+                                        var itemsArr = []
+                                        if(localStorage.getItem('cart-extras')){
+                                          console.log("working for this");
+                                          var cartItems = JSON.parse(localStorage.getItem('cart-extras')) 
+                                          for(var i=0;i<cartItems.length;i++){
+                                            itemsArr.push(cartItems[i]);
+                                          }
+                                          itemsArr.push({
+                                            address: address,
+                                            distance: distance,
+                                            thumbnailImg: thumbnailImg,
+                                            storeName: storeName
+                                        })
+                                          localStorage.setItem('cart-extras', JSON.stringify(itemsArr));
+                                        }
+                                        else{
+                                          console.log("working for else");
+                                    
+                                          localStorage.setItem('cart-extras', JSON.stringify([{
+                                            address: address,
+                                            distance: distance,
+                                            thumbnailImg: thumbnailImg,
+                                            storeName:storeName
+                                        }]));
+                                        }
+                                       
+                                    });
+                                    }
+                                  
+                                        function updateAllDistancesAndAddresses(userPostalCode) {
+                                          var flyerContainers = document.querySelectorAll("[data-merchant]");
+                                  
+                                          // Clear previous results
+                                          document.getElementById("noResultsMessage").style.display = "none";
+                                  
+                                          // Geocode the user's postal code to get coordinates
+                                          geocodeUserPostalCode(
+                                            userPostalCode,
+                                            function (userPostalCodeCoordinates) {
+                                              if (!userPostalCodeCoordinates) {
+                                                // Handle geocoding errors here
+                                                document.getElementById("noResultsMessage").style.display =
+                                                  "block";
+                                              } else {
+                                                flyerContainers.forEach(function (container) {
+                                                  var merchantName = container.getAttribute("data-merchant");
+                                                  updateDistanceAndAddress(
+                                                    merchantName,
+                                                    userPostalCodeCoordinates,
+                                                    container
+                                                  );
+                                                });
+                                  
+                                                // Sort the flyer containers based on distance
+                                                sortFlyersByDistance(flyerContainers);
+                                              }
+                                            }
+                                          );
+                                        }
+                                  
+                                        function geocodeUserPostalCode(postalCode, callback) {
+                                          var geocoder = new google.maps.Geocoder();
+                                  
+                                          // Geocode the postal code to get its coordinates
+                                          geocoder.geocode({ address: postalCode }, function (results, status) {
+                                            if (status === google.maps.GeocoderStatus.OK) {
+                                              var userPostalCodeCoordinates = results[0].geometry.location;
+                                              console.log("Postal Code coordinates:", userPostalCodeCoordinates);
+                                              callback(userPostalCodeCoordinates);
+                                            } else {
+                                              // Handle geocoding errors here
+                                              console.error(
+                                                "Geocode was not successful for the following reason: " + status
+                                              );
+                                              callback(null); // Pass null to indicate an error
+                                            }
+                                          });
+                                        }
+                                  
+                                        function calculateDistance(from, to) {
+                                          // Convert latitude and longitude from degrees to radians
+                                          const fromLatRad = from.lat() * (Math.PI / 180);
+                                          const fromLngRad = from.lng() * (Math.PI / 180);
+                                          const toLatRad = to.lat() * (Math.PI / 180);
+                                          const toLngRad = to.lng() * (Math.PI / 180);
+                                  
+                                          // Earth's radius in kilometers
+                                          const earthRadius = 6371;
+                                  
+                                          // Haversine formula
+                                          const dLat = toLatRad - fromLatRad;
+                                          const dLng = toLngRad - fromLngRad;
+                                  
+                                          const a =
+                                            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                                            Math.cos(fromLatRad) *
+                                              Math.cos(toLatRad) *
+                                              Math.sin(dLng / 2) *
+                                              Math.sin(dLng / 2);
+                                  
+                                          const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+                                  
+                                          // Calculate the distance
+                                          const distance = earthRadius * c;
+                                  
+                                          return distance.toFixed(2); // Return distance rounded to 2 decimal places
+                                        }
+                                  
+                                        function updateDistanceAndAddress(
+                                          merchantName,
+                                          userPostalCodeCoordinates,
+                                          container
+                                        ) {
+                                          // Create a PlacesService instance
+                                          var placesService = new google.maps.places.PlacesService(
+                                            document.createElement("div")
+                                          );
+                                  
+                                          // Define a request to search for the merchant by name
+                                          var request = {
+                                            query: merchantName,
+                                            fields: ["name", "formatted_address", "geometry"],
+                                          };
+                                  
+                                          // Use the PlacesService to search for the merchant
+                                          placesService.textSearch(request, function (results, status) {
+                                            console.log("Results:", results); // Debug: Log the results
+                                            if (status === google.maps.places.PlacesServiceStatus.OK) {
+                                              // Display the address and distance of the first result
+                                              if (results.length > 0) {
+                                                var closestResult = results[0];
+                                                var closestDistance = calculateDistance(
+                                                  userPostalCodeCoordinates,
+                                                  closestResult.geometry.location
+                                                );
+                                                // Loop through all results to find the closest one
+                                                for (var i = 1; i < results.length; i++) {
+                                                  var currentResult = results[i];
+                                                  var currentDistance = calculateDistance(
+                                                    userPostalCodeCoordinates,
+                                                    currentResult.geometry.location
+                                                  );
+                                                  if (currentDistance < closestDistance) {
+                                                    closestResult = currentResult;
+                                                    closestDistance = currentDistance;
+                                                  }
+                                                }
+                                  
+                                                // Display the closest address and its distance
+                                                console.log("Closest Address:", closestResult.formatted_address);
+                                                console.log("Closest Distance:", closestDistance);
+                                  
+                                                // Update the address and distance within the specific container
+                                                var storeAddress = container.querySelector("#storeAddress");
+                                                var distanceElement = container.querySelector("#distance");
+                                                console.log(`THis is address thing ${storeAddress}`);
+                                                storeAddress.textContent = closestResult.formatted_address;
+                                                distanceElement.textContent = closestDistance + " km";
+                                              } else {
+                                                // No matching stores found
+                                                var storeAddress = container.querySelector("#storeAddress");
+                                                var distanceElement = container.querySelector("#distance");
+                                                storeAddress.textContent = "Not found";
+                                                distanceElement.textContent = "N/A";
+                                              }
+                                            } else {
+                                              // Error in Places API request
+                                              console.error("Error in Places API request:", status);
+                                            }
+                                          });
+                                        }
+                                     
+                                      // direction update dode ends
+                                      }
+                                    document.getElementsByClassName('modal-product-list-item')[0].style.display = 'block';
+                                    document.getElementsByClassName('modal-product-append')[0].innerHTML = html;
+                                    var cart = [];
+                                    document.getElementById("cross-modal").addEventListener('click', () => {
+                                    document.getElementsByClassName("modal-product-list-item")[0].style.display = "none";
+                                    })
+                                    runDirection();
+                                    const element = document.getElementsByClassName('add-to-cart');
+                                  
+                                    for(var i=0;i<element.length;i++){
+                                        element[i].addEventListener('click',(event)=>{
+                                            if(!event.target.classList.contains("add-to-cart")){
+                                                return false
+                                            }
+                                            document.getElementsByClassName('subtotal-price')[0].style.display = 'flex'
+                                            console.log(`add event listener is called`);
+                                            var cart = [];
+                                            if(localStorage.getItem('order-items'))
+                                            {
+                                                JSON.parse(localStorage.getItem('order-items')).map((item)=>{
+                                                    cart.push(item)
+                                                })
+                                            }
+                                            event.currentTarget.classList.remove('add-to-cart');
+                                            event.currentTarget.classList.remove('btn-primary');
+                                            event.currentTarget.classList.add('btn-success');
+                                            event.currentTarget.textContent = "Added to shopping list";
+                                            parenItem =  event.currentTarget.parentNode.parentNode;
+                                            console.log(`This is id`+parenItem.querySelector('#id').value);
+                                            cart.push({
+                                            id:parenItem.querySelector('#id').value ,
+                                            imgUrl:parenItem.querySelector('#flyer-item-img').src ,
+                                            productTitle:parenItem.querySelector('#flyer-item-name').getAttribute('title'),
+                                            price: parenItem.querySelector('#flyer-item-price').textContent,
+                                            validFrom: parenItem.querySelector('#flyer-item-valid-from').textContent , 
+                                            validTo:parenItem.querySelector('#flyer-item-valid-to').textContent ,
+                                            store_name:parenItem.querySelector('#merchantItemName').value ,
+                                            qty: 1,
+                                            cart_extras: {
+                                                address: parenItem.querySelector('#storeAddress').textContent,
+                                                distance: parenItem.querySelector('#distance').textContent,
+                                                thumbnailImg: parenItem.querySelector("#merchant-img").innerHTML,
+                                                storeName:parenItem.querySelector('#merchantItemName').value
+                                              }
+                                            })
+                                            localStorage.setItem('order-items', JSON.stringify(cart));   
+                                            builtCart();
+                                        })}
+                                        
+                                }
+                                var elemCount = document.getElementsByClassName('search-item-list-right');
+                                for (var i = 0; i < elemCount.length; i++) {
+                                    (function (index) {
+                                        elemCount[index].addEventListener('click', () => {
+                                            console.log(elemCount[index].getAttribute('data-search'));
+                                            createShoppingList(elemCount[index].getAttribute('data-search'))
+                                        });
+                                    })(i);
+                                }
+                            }
+                        }
+                    }
+                    builtArray();
+                }
+            })
+            if (suggestionMerchantNew.length == 0) {
+                const runSearch = async () => {
+                    try {
+                        const response = await fetch("https://backflipp.wishabi.com/flipp/flyers?postal_code=L6P4E6");
+                        if (response.status === 200) {
+                            const flyers = await response.json();
+
+                            const productPromises = flyers.flyers.map(async (res, i) => {
+                                try {
+                                    const productResponse = await Promise.race([
+                                        fetch(`https://backflipp.wishabi.com/flipp/flyers/${res.id}`),
+                                        new Promise((_, reject) => setTimeout(() => reject(new Error('Request timeout')), 5000))
+                                    ]);
+
+                                    if (productResponse.status === 200) {
+                                        const productListResponse = await productResponse.json();
+
+                                        if (productListResponse && productListResponse.items) {
+                                            function formatDate(dateString) {
+                                                var dateString = dateString; // ISO 8601 format
+                                                var dateObject = new Date(dateString);
+                                                var year = dateObject.getFullYear();
+                                                var month = dateObject.getMonth() + 1; // Months are 0-based, so add 1
+                                                var day = dateObject.getDate();
+                                                var hours = dateObject.getHours();
+                                                var minutes = dateObject.getMinutes();
+                                                return `${year}-${month}-${day} ${hours}:${minutes}`;
+                                            }
+                                            return {
+                                                id: res.id,
+                                                merchant: res.merchant,
+                                                merchant_logo: res.merchant_logo,
+                                                merchant_valid_from: formatDate(res.valid_from),
+                                                merchant_valid_to: formatDate(res.valid_to),
+                                                merchat_postal_code: res.postal_code,
+                                                merchant_thumbnail_url: res.thumbnail_url,
+                                                products: productListResponse.items.map((item, j) => ({
+                                                    id: item.id,
+                                                    name: item.name,
+                                                    product_img: item.cutout_image_url,
+                                                    valid_to: formatDate(item.valid_to),
+                                                    valid_from: formatDate(item.valid_from),
+                                                    price: item.price,
+                                                    merchant: res.merchant,
+                                                    merchant_logo: res.merchant_logo,
+                                                }))
+                                            };
+                                            
+                                      
+                                        } else {
+                                            console.error(`Error fetching product data: Malformed JSON response`);
+                                            return null;
+                                        }
+                                    } else {
+                                        // console.error(`Error fetching product data: Status ${productResponse.status}`);
+                                        return null;
+                                    }
+                                } catch (error) {
+                                    // console.error(`Error fetching product data: ${error}`);
+                                    return null;
+                                }
+                            });
+
+                            const productResults = await Promise.allSettled(productPromises);
+
+                            const suggestionMerchant = productResults
+                                .filter(result => result.status === "fulfilled" && result.value !== null)
+                                .map(result => result.value);
+                            var flagCheck = false;
+                            var html = '';
+                            var merchantHtml = '';
+                            console.log(suggestionMerchant);
+                           var  countSuggestion = 0;
+                           var  countSuggestionNest = 0;
+                            suggestionMerchant.every((item, index) => {
+                                // Display products for other merchants that contain the search keyword
+                                item.products.every((product, i) => {
+                                    if (product.name.toLowerCase().includes(searchKeyword.toLowerCase())) {
+                                        countData++;
+                                        flagCheck = true;
+                                    }
+                                    countSuggestionNest++;
+                                    if(countSuggestionNest === 50 )
+                                    {
+                                    console.log("It is in false statement");
+                                    return false;
+                                    }
+                                    return true;
+                                });
+                                countSuggestionNest = 0;
+                                countSuggestion++;
+                                if(countSuggestion==50){
+                                    return false;
+                                }
+                                if(countSuggestion === suggestionMerchant.length )
+                                   {
+                                     console.log("It is in false statement");
+                       
+                                     return false;
+                                   }
+                                   return true;
+                            });
+                            suggestionMerchantNew = suggestionMerchant;
+                            document.getElementById("loader-flyer").style.display="none"
+                            document.getElementsByClassName("loader-hide")[0].style.display="block"
+                            document.getElementsByClassName("loader-hide")[1].style.display="block"
+
+
+                        } else {
+                            // console.error(`Error fetching flyer data: Status ${response.status}`);
+                        }
+                    } catch (error) {
+                        // console.error(`Error fetching flyer data: ${error}`);
+                    }
+                }
+                runSearch();
+            }
+            else {
+
+            }
+
+        });
+    </script>
+    <script>
+        function formatDate(dateString) {
+    var dateString = dateString; // ISO 8601 format
+    var dateObject = new Date(dateString);
+    var year = dateObject.getFullYear();
+    var month = dateObject.getMonth() + 1; // Months are 0-based, so add 1
+    var day = dateObject.getDate();
+    return `${year}-${month}-${day}`;
+}
+
+    </script>
+</body>
+
+</html>
+

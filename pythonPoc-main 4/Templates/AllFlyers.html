@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- Title and Meta Tags -->
+    <title>Flyers</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+    <!-- Custom Styles -->
+    <style>
+      body {
+        background: #222;
+        font-family: "Lato", sans-serif;
+        overflow-x: hidden;
+      }
+
+      h1,
+      h2 {
+        color: black;
+      }
+
+      .btn-primary {
+        background-color: #1dc2e8;
+        border-color: #1dc2e8;
+      }
+
+      .btn-primary:hover {
+        background-color: #0469ed;
+        border-color: #0469ed;
+      }
+
+      .container-fluid {
+        background-color: #fff;
+        border: 4px solid #1dc2e8;
+        border-radius: 20px;
+        padding: 15px;
+        margin: 15px 0;
+      }
+
+      img {
+        max-width: 100%;
+        height: auto;
+      }
+
+      .search-container {
+        text-align: center;
+        margin-top: 20px;
+      }
+
+      .search-input {
+        width: 100%;
+        padding: 10px;
+        border-radius: 4px;
+      }
+
+      .nav-link {
+        color: #1dc2e8 !important;
+        font-weight: 600;
+        font-size: 18px;
+        letter-spacing: 1px;
+        margin-right: 30px;
+      }
+
+      .nav-padding {
+        padding-left: 50px;
+        padding-right: 50px;
+      }
+
+      h1 {
+        color: #fff;
+        text-transform: uppercase;
+        font-size: 70px;
+        letter-spacing: 8px;
+        font-weight: 900;
+        margin-bottom: 20px;
+        margin-top: 30px;
+      }
+
+      p {
+        color: #000;
+        font-size: 19px;
+        line-height: 150%;
+      }
+
+      .box {
+        transition: all 0.2s ease-in-out;
+        z-index: 1000000;
+        margin-bottom: 40px;
+      }
+
+      .box:hover {
+        transform: scale(1.1);
+        z-index: 1000000;
+      }
+
+      .row {
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+        margin-right: 0px;
+        margin-left: 0px;
+      }
+
+      .p-3 {
+        padding: 0rem !important;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark nav-padding">
+      <a class="navbar-brand" href="/">
+        <img
+          src="https://i.ibb.co/YcK5TGf/brochure.png"
+          style="
+            height: 50px;
+            width: 50px;
+            object-fit: contain;
+            margin-right: 30px;
+          "
+          alt=""
+        />
+      </a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="/Allflyers">Flyers</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/shopping_list" id="open-modal"
+              >Shopping Cart</a
+            >
+          </li>
+        </ul>
+        <ul class="navbar-nav pull right">
+          <form
+            action="/get_searched_data"
+            method="GET"
+            style="position: relative; top: 7px; margin-right: 40px"
+          >
+            <div
+              class="input-group mb-3"
+              style="position: relative; top: 7px; margin-right: 40px"
+            >
+              <input
+                type="text"
+                class="form-control"
+                id="search-text"
+                name="global-search"
+                placeholder="Search store or an item"
+                required
+                id="flyerSearch"
+              />
+              <div class="input-group-append">
+                <button class="btn btn-primary" id="search-btn-global">
+                  Search
+                </button>
+              </div>
+            </div>
+          </form>
+
+          <li class="nav-item" style="display: flex; align-items: center">
+            <img
+              src="https://i.ibb.co/nCcYNNB/mail.png"
+              style="
+                height: 30px;
+                width: 30px;
+                object-fit: contain;
+                margin-right: 10px;
+              "
+              alt=""
+            />
+            <a class="nav-link" href="/">{{postal_code}}</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Page Content -->
+    <div class="container">
+      <!-- Section: Page Title -->
+      <div class="row">
+        <div class="col-lg-12 text-center">
+          <h1 data-aos="fade-up" data-aos-anchor-placement="top-center">
+            All Flyers
+          </h1>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Section: Flyer Card-->
+    <div class="row p-3">
+      <!-- Loop through flyer_data to generate flyer cards -->
+      {% for flyer in flyer_data %}
+      <div class="col-md-3 box" data-merchant="{{ flyer['merchant'] }}">
+        <div class="container-fluid col-xs-12">
+          <!-- Flyer content goes here -->
+          <div class="text-center" style="margin-bottom: 20px">
+            <a
+              href="{{ url_for('view_flyer', flyer_path='https://backflipp.wishabi.com/flipp/flyers/' ~ flyer['id']) }}"
+              id="item-logo"
+            >
+              <img 
+                
+                style="height: 100px; width: 100px; object-fit: contain"
+                src="{{ flyer['merchant_logo'] }}"
+                alt=""
+              />
+            </a>
+          </div>
+          <div class="col-xs-6 text-center" style="height: 100px; width: 100%">
+            <a
+              href="{{ url_for('view_flyer', flyer_path='https://backflipp.wishabi.com/flipp/flyers/' ~ flyer['id']) }}"
+            >
+              <img
+                style="width: 100%; height: 100%; object-fit: cover"
+                src="{{ flyer['thumbnail_url'] }}"
+                alt=""
+              />
+            </a>
+          </div>
+          <div
+            class="col-xs-4 text-center row"
+            style="margin-top: 20px; padding: 10px; font-variant: small-caps"
+          >
+            <div class="span6" style="float: none; margin: 0 auto">
+              <p>
+                <strong>Valid From: </strong>{{ flyer['valid_from'] | to_date }}
+              </p>
+              <p>
+                <strong>Valid Until: </strong>{{ flyer['valid_to'] | to_date }}
+              </p>
+              <!-- In your HTML template -->
+              <p>
+                <strong>Address: </strong>
+                <span id="storeAddress">Calculating...</span>
+              </p>
+              <p>
+                <strong>Distance: </strong>
+                <span id="distance">Calculating...</span>
+              </p>
+              <p>
+                <span id="store-name" style="display: none;">{{flyer['merchant']}}</span>
+                <button
+                  class="btn btn-light get-directions"
+                  data-merchant="{{ flyer['merchant'] }}"
+                >
+                  Get Directions
+                  <a href="#">
+                    <img
+                      src="https://cdn.iconscout.com/icon/free/png-512/free-directions-1780532-1517622.png?f=webp&w=512"
+                      alt="Get Directions"
+                      width="32"
+                      height="32"
+                    />
+                  </a>
+                </button>
+              </p>
+            </div>
+          </div>
+          <div class="col-lg-12">
+            <a
+            href="{{ url_for('view_flyer', flyer_path='https://backflipp.wishabi.com/flipp/flyers/' ~ flyer['id'] ~ '?store-name=' ~ flyer['merchant']) }}"
+            >
+              <button type="button" class="btn btn-primary view-allp" style="width: 100%">
+                View all Products
+              </button>
+            </a>
+          </div>
+          <div id="noResultsMessage" style="display: none">
+            No matching stores found.
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- div if search is active ends -->
+
+    <script>
+
+      // Function to handle the search functionality for flyers
+      function searchFlyers() {
+        var input = document.getElementById("flyerSearch");
+        var filter = input.value.toUpperCase();
+        var flyers = document.querySelectorAll(".container-fluid");
+        if (filter != "") {
+          for (var i = 0; i < flyers.length; i++) {
+            flyers[i].parentNode.setAttribute("data-aos", "");
+          }
+        } else {
+          for (var i = 0; i < flyers.length; i++) {
+            flyers[i].parentNode.setAttribute("data-aos", "fade-up");
+          }
+        }
+        var resultsFound = false; // Add a flag to track if results are found
+        for (var i = 0; i < flyers.length; i++) {
+          var flyer = flyers[i];
+          var merchantLogo = flyer.querySelector("img");
+          var merchantName = merchantLogo.alt.toUpperCase();
+          
+          if (merchantName.indexOf(filter) > -1) {
+            flyer.parentNode.style.display = "";
+            resultsFound = true; // Results are found
+          } else {
+            flyer.parentNode.style.display = "none";
+          }
+        }           
+
+        if (!resultsFound) {
+          document.getElementById("err-result-not-found").innerHTML =
+            "<span style='color:red'>Not flyers found</span>";
+        } else {
+          document.getElementById("err-result-not-found").innerHTML = "";
+        }
+      }
+
+      // Event listener for "View all Products" button
+      var btnenv = document.getElementsByClassName('view-allp');
+      for(var j=0;j<btnenv.length;j++)
+        {
+          btnenv[j].addEventListener('click', (event) => {
+    console.log("working for btn");
+    var itemVal = event.target.parentNode.parentNode.parentNode;
+    
+    var address = itemVal.querySelector('#storeAddress').textContent;
+    var distance = itemVal.querySelector('#distance').textContent;
+    var thumbnailImg = itemVal.querySelector('#item-logo').innerHTML;
+    var storeName = itemVal.querySelector('#store-name').textContent;
+    var itemsArr = []
+    if(localStorage.getItem('cart-extras')){
+      console.log("working for this");
+      var cartItems = JSON.parse(localStorage.getItem('cart-extras')) 
+      for(var i=0;i<cartItems.length;i++){
+        itemsArr.push(cartItems[i]);
+      }
+      itemsArr.push({
+        address: address,
+        distance: distance,
+        thumbnailImg: thumbnailImg,
+        storeName: storeName
+    })
+      localStorage.setItem('cart-extras', JSON.stringify(itemsArr));
+    }
+    else{
+      console.log("working for else");
+
+      localStorage.setItem('cart-extras', JSON.stringify([{
+        address: address,
+        distance: distance,
+        thumbnailImg: thumbnailImg,
+        storeName:storeName
+    }]));
+    }
+   
+});
+}
+    </script>
+
+    <!-- Add your Google API key here -->
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC7jljWcsh-PZYVKD5m4JfmIOvpaZWX3V8&libraries=places"
+      async
+      defer
+    ></script>
+
+    <script>
+      // Function to update distances and addresses for all merchants
+      // Wrap your JavaScript code in a function to ensure it runs after the page is loaded.
+      document.addEventListener("DOMContentLoaded", function () {
+        // Geocode the user's postal code
+        //geocodeUserPostalCode('{{ postal_code }}');  // Replace '{{ postal_code }}' with the actual user's postal code
+
+        const userPostalCode = "{{ postal_code }}";
+        // Call the function to update addresses and distances for all merchants.
+        updateAllDistancesAndAddresses(userPostalCode);
+
+        var directionIcons = document.querySelectorAll(".get-directions");
+
+        directionIcons.forEach(function (icon) {
+          icon.addEventListener("click", function (event) {
+            event.preventDefault();
+
+            // Get the merchant name from the data attribute
+            var merchantName = icon.getAttribute("data-merchant");
+
+            // Open a new tab with Google Maps directions
+            var directionsUrl =
+              "https://www.google.com/maps/dir/?api=1&destination=" +
+              merchantName;
+            window.open(directionsUrl, "_blank");
+          });
+        });
+      });
+
+      function updateAllDistancesAndAddresses(userPostalCode) {
+        var flyerContainers = document.querySelectorAll("[data-merchant]");
+
+        // Clear previous results
+        document.getElementById("noResultsMessage").style.display = "none";
+
+        // Geocode the user's postal code to get coordinates
+        geocodeUserPostalCode(
+          userPostalCode,
+          function (userPostalCodeCoordinates) {
+            if (!userPostalCodeCoordinates) {
+              // Handle geocoding errors here
+              document.getElementById("noResultsMessage").style.display =
+                "block";
+            } else {
+              flyerContainers.forEach(function (container) {
+                var merchantName = container.getAttribute("data-merchant");
+                updateDistanceAndAddress(
+                  merchantName,
+                  userPostalCodeCoordinates,
+                  container
+                );
+              });
+
+              // Sort the flyer containers based on distance
+              sortFlyersByDistance(flyerContainers);
+            }
+          }
+        );
+      }
+
+      // Function to geocode the user's postal code
+      function geocodeUserPostalCode(postalCode, callback) {
+        var geocoder = new google.maps.Geocoder();
+
+        // Geocode the postal code to get its coordinates
+        geocoder.geocode({ address: postalCode }, function (results, status) {
+          if (status === google.maps.GeocoderStatus.OK) {
+            var userPostalCodeCoordinates = results[0].geometry.location;
+            console.log("Postal Code coordinates:", userPostalCodeCoordinates);
+            callback(userPostalCodeCoordinates);
+          } else {
+            // Handle geocoding errors here
+            console.error(
+              "Geocode was not successful for the following reason: " + status
+            );
+            callback(null); // Pass null to indicate an error
+          }
+        });
+      }
+
+      // Function to calculate distance between two coordinates
+      function calculateDistance(from, to) {
+        // Convert latitude and longitude from degrees to radians
+        const fromLatRad = from.lat() * (Math.PI / 180);
+        const fromLngRad = from.lng() * (Math.PI / 180);
+        const toLatRad = to.lat() * (Math.PI / 180);
+        const toLngRad = to.lng() * (Math.PI / 180);
+
+        // Earth's radius in kilometers
+        const earthRadius = 6371;
+
+        // Haversine formula
+        const dLat = toLatRad - fromLatRad;
+        const dLng = toLngRad - fromLngRad;
+
+        const a =
+          Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+          Math.cos(fromLatRad) *
+            Math.cos(toLatRad) *
+            Math.sin(dLng / 2) *
+            Math.sin(dLng / 2);
+
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+        // Calculate the distance
+        const distance = earthRadius * c;
+
+        return distance.toFixed(2); // Return distance rounded to 2 decimal places
+      }
+
+      // Function to update distance and address for a specific merchant
+      function updateDistanceAndAddress(
+        merchantName,
+        userPostalCodeCoordinates,
+        container
+      ) {
+        // Create a PlacesService instance
+        var placesService = new google.maps.places.PlacesService(
+          document.createElement("div")
+        );
+
+        // Define a request to search for the merchant by name
+        var request = {
+          query: merchantName,
+          fields: ["name", "formatted_address", "geometry"],
+        };
+
+        // Use the PlacesService to search for the merchant
+        placesService.textSearch(request, function (results, status) {
+          console.log("Results:", results); // Debug: Log the results
+          if (status === google.maps.places.PlacesServiceStatus.OK) {
+            // Display the address and distance of the first result
+            if (results.length > 0) {
+              var closestResult = results[0];
+              var closestDistance = calculateDistance(
+                userPostalCodeCoordinates,
+                closestResult.geometry.location
+              );
+              // Loop through all results to find the closest one
+              for (var i = 1; i < results.length; i++) {
+                var currentResult = results[i];
+                var currentDistance = calculateDistance(
+                  userPostalCodeCoordinates,
+                  currentResult.geometry.location
+                );
+                if (currentDistance < closestDistance) {
+                  closestResult = currentResult;
+                  closestDistance = currentDistance;
+                }
+              }
+
+              // Display the closest address and its distance
+              console.log("Closest Address:", closestResult.formatted_address);
+              console.log("Closest Distance:", closestDistance);
+
+              // Update the address and distance within the specific container
+              var storeAddress = container.querySelector("#storeAddress");
+              var distanceElement = container.querySelector("#distance");
+
+              storeAddress.textContent = closestResult.formatted_address;
+              distanceElement.textContent = closestDistance + " km";
+            } else {
+              // No matching stores found
+              var storeAddress = container.querySelector("#storeAddress");
+              var distanceElement = container.querySelector("#distance");
+              storeAddress.textContent = "Not found";
+              distanceElement.textContent = "N/A";
+            }
+          } else {
+            // Error in Places API request
+            console.error("Error in Places API request:", status);
+          }
+        });
+      }
+    </script>
+
+    <script>
+      // Function to search for PDF flyers for a specific merchant
+      function searchPDFFlyers(merchantName) {
+        const postalCode = "{{ postal_code }}"; // Retrieve postal code from session
+        const resultsContainer = document.getElementById("pdf-results");
+
+        // Send a POST request to search for PDF flyers
+        fetch("/search_grocery_flyers", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: `store_name=${merchantName}`,
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            const pdfLinks = data.pdf_links;
+            if (pdfLinks.length === 0) {
+              resultsContainer.innerHTML =
+                "<p>No PDF flyers found for this store.</p>";
+            } else {
+              resultsContainer.innerHTML = ""; // Clear previous results
+              pdfLinks.forEach((link) => {
+                const linkElement = document.createElement("a");
+                linkElement.href = link;
+                linkElement.textContent = link;
+                resultsContainer.appendChild(linkElement);
+              });
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+            resultsContainer.innerHTML =
+              "<p>Error searching for PDF flyers.</p>";
+          });
+      }
+    </script>
+
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqGvRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
+      integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+      integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script>
+      AOS.init();
+    </script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  </body>
+</html>

@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <title>Home</title>
+    <style>
+        body {
+            font-family: 'Lato', sans-serif;
+            height: 100vh;
+            overflow: hidden;
+
+        }
+
+        /* Add styles for the sliding menu */
+        #menu {
+            width: 250px;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            left: -250px;
+            /* Hide the menu by default */
+            background-color: #333;
+            transition: 0.3s;
+        }
+
+        #menu ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        #menu li {
+            margin: 20px 0;
+        }
+
+        #menu a {
+            text-decoration: none;
+            color: #fff;
+            font-size: 18px;
+        }
+
+        #menu-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            cursor: pointer;
+            color: #fff;
+            font-size: 24px;
+        }
+
+        /* Add styles for the main content */
+        #content {
+            margin-left: 0;
+            transition: 0.3s;
+        }
+
+        .nav-link {
+            color: #1DC2E8 !important;
+            font-weight: 600;
+            font-size: 18px;
+            letter-spacing: 1px;
+            margin-right: 30px;
+        }
+
+        .nav-padding {
+            padding-left: 140px;
+            padding-right: 140px;
+        }
+
+        .head {
+            background: linear-gradient(to right, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url("https://images.unsplash.com/photo-1508161773455-3ada8ed2bbec?auto=format&fit=crop&q=80&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&w=1974");
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+
+        h1 {
+            color: #fff;
+            text-transform: uppercase;
+            font-size: 90px;
+            letter-spacing: 11px;
+            font-weight: 900;
+        }
+
+        .para {
+            color: #fff;
+            text-transform: uppercase;
+            font-size: 30px;
+            letter-spacing: 4px;
+            font-weight: 900;
+            margin-bottom: 40px;
+        }
+
+        p {
+            color: #222;
+            font-size: 19px;
+            line-height: 150%;
+        }
+
+        input {
+            padding: 30px !important;
+        }
+
+        input::placeholder {
+            color: #222 !important;
+            font-family: 'Lato', sans-serif;
+        }
+        .nav-padding {
+                padding-left: 50px;
+                padding-right: 50px;
+            }
+    </style>
+    <script>
+        function openPopup() {
+            // Open a new browser window for creating and saving notes
+            const popup = window.open('', 'Create List', 'width=400,height=400');
+            popup.document.write(`
+                <h2>Create List</h2>
+                <textarea id="noteInput" rows="6" cols="50" placeholder="Enter your to-do list"></textarea>
+                <br>
+                <button onclick="saveNote()">Save</button>
+            `);
+        }
+
+        function saveNote() {
+            // Get the note content from the pop-up window
+            const noteInput = document.getElementById("noteInput");
+            const note = noteInput.value;
+
+            // Display the note in the main window (for demonstration purposes)
+            alert("Saved Note:\n" + note);
+        } 
+    </script>
+</head>
+
+<body style="background-color: #F8F9FA;">
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark nav-padding">
+        <a class="navbar-brand" href="/">
+            <img src="https://i.ibb.co/YcK5TGf/brochure.png"
+                style="height: 50px; width: 50px; object-fit: contain; margin-right: 30px;" alt="">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+            </ul>
+
+            <ul class="navbar-nav pull-righ">
+                <li class="nav-item">
+                    <a class="nav-link" href="#about" data-target="#exampleModal2" data-toggle="modal">About</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main content -->
+    <div id="content" class="container-fluid">
+        <div class="row head">
+            <div class="col-lg-12" style="position: relative; top: -100px;">
+                <div class="text-center mt-5">
+                    <h1 data-aos="fade-up">Savings Scout</h1>
+                    <p data-aos="fade-down" class="para">Enter your postal code to view flyers</p>
+                </div>
+
+                <div class="row justify-content-center " data-aos="fade-right">
+                    <div class="col-md-4">
+                        <form method="POST" action="/update_flyer_url">
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" name="postal_code"
+                                    placeholder="Enter postal code" required>
+                                <div class="input-group-append">
+                                    <button type="submit" class="btn btn-primary">View Flyers</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Create List</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <textarea id="noteInput" class="form-control" rows="6" cols="50"
+                        placeholder="Enter your to-do list"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Discard</button>
+                    <button type="button" class="btn btn-primary" onclick="saveNote()">Create</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">About</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos, dolorum earum. Labore,
+                        tempora quia! Neque iusto obcaecati, incidunt molestias quibusdam aperiam amet mollitia commodi.
+                        Dicta, aut quis? Repellendus, impedit cumque.</p>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos, dolorum earum. Labore,
+                        tempora quia! Neque iusto obcaecati, incidunt molestias quibusdam aperiam amet mollitia commodi.
+                        Dicta, aut quis? Repellendus, impedit cumque.</p>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos, dolorum earum. Labore,
+                        tempora quia! Neque iusto obcaecati, incidunt molestias quibusdam aperiam amet mollitia commodi.
+                        Dicta, aut quis? Repellendus, impedit cumque.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+        </script>
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+
+
+    <!-- JavaScript for handling the sliding menu -->
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById("menu");
+            const content = document.getElementById("content");
+            if (menu.style.left === "0px") {
+                menu.style.left = "-250px";
+                content.style.marginLeft = "0";
+            } else {
+                menu.style.left = "0";
+                content.style.marginLeft = "250px";
+            }
+        }
+    </script>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script>
+        AOS.init();
+    </script>
+</body>
+
+</html>
